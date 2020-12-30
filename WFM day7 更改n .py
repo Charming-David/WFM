@@ -18,11 +18,7 @@ beta的物理意义
 @author: David Lyu
 """
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Dec 17 19:54:11 2020
-发现了psi逆向传播的折射率矩阵也应该逆过来
-@author: lenovo
-"""
+
 
 # -*- coding: utf-8 -*-
 """
@@ -44,7 +40,6 @@ Created on Sun Dec 13 11:14:51 2020
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from pylab import *
 
 dx=0.5
 dz=0.11
@@ -127,14 +122,14 @@ for t in range(0,20):
     if t%1==0:
         
         plt.figure()
-        subplot(2,2,1)
+        plt.subplot(2,2,1)
         plt.imshow(abs(psi),cmap='gray')
-        subplot(2,2,2)
+        plt.subplot(2,2,2)
         
         plt.imshow(abs(phi),cmap='gray')
-        subplot(2,2,3)
+        plt.subplot(2,2,3)
         plt.imshow(q,cmap='gray')
-        subplot(2,2,4)
+        plt.subplot(2,2,4)
         plt.imshow(n,cmap='gray')
     
 

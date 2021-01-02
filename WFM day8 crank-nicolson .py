@@ -40,19 +40,20 @@ Created on Sun Dec 13 11:14:51 2020
 """
 import numpy as np
 from matplotlib import pyplot as plt
-
-dx=0.5
+import time
+start_time = time.time()
+dx=0.11
 dz=0.11
-wavelength=3
+wavelength=1.55
 k0=2*np.pi/wavelength
-nmax=1.45+1.45*0.1/2
-nmin=1.45-1.45*0.1/2
+nmax=1.45+1.45*0.0075/2
+nmin=1.45-1.45*0.0075/2
 
 beta=k0*nmax*0.993#应大于0.9925280199252802保证导模
 
 
-nlx=30
-nlz=100
+nlx=50
+nlz=60
 d=5
 lx=d*nlx
 lz=d*nlz
@@ -61,7 +62,7 @@ psi=np.zeros((lx,lz),dtype=complex)
 n=np.zeros((lx,lz))
 nn=np.zeros((lx,lz))
 qq=np.zeros((lx,lz))
-n[:,:]=1.2
+n[:,:]=1.45
 nn=np.fliplr(n)
 
 a=np.zeros((lx),dtype=complex)
@@ -75,7 +76,7 @@ aaa=np.zeros((lx-2,lx-2),dtype=complex)
 
 h=complex(0,0)
 j=complex(0,1)
-alpha=0.1
+alpha=0.5
 
 """#设定折射率的区域
 for x in range(0,lx-1):
@@ -85,7 +86,8 @@ for x in range(0,lx-1):
         else:
             n[x,z]=1.01
 """
-for t in range(0,5):
+fom=np.zeros((10))
+for t in range(0,10):
     
     for x in range(0,lx-1):
         psi[x,0]=np.exp(-(x-lx*2/4)**2/(lx/24)**2)
@@ -131,13 +133,17 @@ for t in range(0,5):
             for aa in range(0,d-1):
                 for bb in range(0,d-1):
                     h=h+psi[d*x+aa,d*z+bb]*np.conjugate(phi[d*x+aa,d*z+bb])
-                #h=psi[d*x,d*z]*np.conjugate(phi[d*x,d*z])+psi[d*x+d,d*z]*np.conjugate(phi[d*x+d-1,d*z])+psi[d*x,d*z+d-1]*np.conjugate(phi[d*x,d*z+d-1])+psi[d*x+d-1,d*z+d-1]*np.conjugate(phi[d*x+d-1,d*z+d-1])
-            if abs(2*k0*h.imag/d/d)>1e-5:
-                qq[d*x:d*x+d,d*z:d*z+d]=2*k0*h.imag/d/d
-            else:
-                qq[d*x:d*x+d,d*z:d*z+d]=0
-            if  (np.sign(qq[d*x,d*z])!=0):
-                n[d*x:d*x+d,d*z:d*z+d]=1.2+alpha*np.sign(qq[d*x,d*z])
+            qq[d*x:d*x+d,d*z:d*z+d]=2*k0*h.imag/d/d
+            """
+            if (t==1)and(abs(h)==0):
+                n[d*x:d*x+d,d*z:d*z+d]=nmin
+                print('1')
+            """
+            n[d*x:d*x+d,d*z:d*z+d]-=alpha*qq[d*x:d*x+d,d*z:d*z+d]
+            if (n[d*x,d*z]>nmax):
+                n[d*x:d*x+d,d*z:d*z+d]=nmax
+            elif(n[d*x,d*z]<nmin):
+                n[d*x:d*x+d,d*z:d*z+d]=nmin
             nn=np.fliplr(n)
     if t%1==0:
         
@@ -151,7 +157,10 @@ for t in range(0,5):
         plt.imshow(qq,cmap='gray')
         plt.subplot(2,2,4)
         plt.imshow(n,cmap='gray')
-    
+    fom[t]=np.sum(qq)/lx/lz
+plt.plot(fom)
+end_time = time.time()
+print('running time: ',end_time-start_time)
 
 
 

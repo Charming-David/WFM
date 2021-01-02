@@ -76,7 +76,7 @@ aaa=np.zeros((lx-2,lx-2),dtype=complex)
 
 h=complex(0,0)
 j=complex(0,1)
-alpha=1
+alpha=0.01
 
 """#设定折射率的区域
 for x in range(0,lx-1):
@@ -86,8 +86,8 @@ for x in range(0,lx-1):
         else:
             n[x,z]=1.01
 """
-fom=np.zeros((10))
-for t in range(0,10):
+fom=np.zeros((20))
+for t in range(0,20):
     
     for x in range(0,lx-1):
         psi[x,0]=np.exp(-(x-lx*2/4)**2/(lx/24)**2)
@@ -145,7 +145,7 @@ for t in range(0,10):
             qq[d*x:d*x+d,d*z:d*z+d]=2*k0*h.imag/d/d
             
             
-            n[d*x:d*x+d,d*z:d*z+d]-=alpha*qq[d*x:d*x+d,d*z:d*z+d]
+            n[d*x:d*x+d,d*z:d*z+d]+=alpha*qq[d*x:d*x+d,d*z:d*z+d]
             if (n[d*x,d*z]>nmax):
                 n[d*x:d*x+d,d*z:d*z+d]=nmax
             elif(n[d*x,d*z]<nmin):

@@ -81,7 +81,7 @@ for x in range(0,lx-1):
         else:
             n[x,z]=1.01
 """
-for t in range(0,20):
+for t in range(0,2):
     
     for x in range(0,lx-1):
         psi[x,0]=np.exp(-(x-lx*2/4)**2/(lx/24)**2)
@@ -118,6 +118,9 @@ for t in range(0,20):
                 q[d*x:d*x+d,d*z:d*z+d]=0
             if  (np.sign(q[d*x,d*z])!=0):
                 n[d*x:d*x+d,d*z:d*z+d]=1.2+alpha*np.sign(q[d*x,d*z])
+            if (t==1)and(abs(h)==0):
+                n[d*x:d*x+d,d*z:d*z+d]=nmin
+            
             nn=np.fliplr(n)
     if t%1==0:
         

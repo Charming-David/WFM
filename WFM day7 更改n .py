@@ -42,22 +42,17 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 dx=0.5
-dz=0.11
-wavelength=1.55
+dz=0.1
+wavelength=8
 k0=2*np.pi/wavelength
-nmax=1.45+1.45*0.01/2
-nmin=1.45-1.45*0.01/2
+nmax=1.45+1.45*0.1/2
+nmin=1.45-1.45*0.1/2
 
 beta=k0*nmax*0.993#应大于0.9925280199252802保证导模
 
-def sinn(x):
-    if x>1.1:
-        return 0.9
-    else:
-        return 0.85
 
 nlx=30
-nlz=100
+nlz=50
 d=5
 lx=d*nlx
 lz=d*nlz
@@ -81,7 +76,7 @@ for x in range(0,lx-1):
         else:
             n[x,z]=1.01
 """
-for t in range(0,2):
+for t in range(0,5):
     
     for x in range(0,lx-1):
         psi[x,0]=np.exp(-(x-lx*2/4)**2/(lx/24)**2)
@@ -118,8 +113,8 @@ for t in range(0,2):
                 q[d*x:d*x+d,d*z:d*z+d]=0
             if  (np.sign(q[d*x,d*z])!=0):
                 n[d*x:d*x+d,d*z:d*z+d]=1.2+alpha*np.sign(q[d*x,d*z])
-            if (t==1)and(abs(h)==0):
-                n[d*x:d*x+d,d*z:d*z+d]=nmin
+            #if (t==1)and(abs(h)==0):
+                #n[d*x:d*x+d,d*z:d*z+d]=nmin
             
             nn=np.fliplr(n)
     if t%1==0:
